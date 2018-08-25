@@ -1,0 +1,31 @@
+<h2>Update celebrity</h2>
+<div class="row">
+  <div class="col-md-4">
+
+    <form action="/celebrities/{{celebrity._id}}/update" method="post" class="form">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" name="name" class="form-control" value="{{celebrity.name}}" />
+      </div>
+      <div class="form-group">
+        <label for="occupation">Occupation</label>
+        <select name="occupation" id="occupation">
+          {{#each occupations}}
+            {{#if this.isValue}}
+              <option value="{{this.occupation}}" selected>{{this.occupation}}</option>
+            {{else}}
+              <option value="{{this.occupation}}">{{this.occupation}}</option>
+            {{/if}}
+          {{/each}}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="name">Catch Phrase</label>
+        <textarea name="catchPhrase" class="form-control">{{celebrity.catchPhrase}}</textarea>
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-success">Update</button>
+      </div>
+    </form>
+  </div>
+</div>

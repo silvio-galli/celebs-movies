@@ -41,6 +41,34 @@ router.get('/:id', (req, res) => {
   .catch( err => { throw err });
 });
 
+// GET /celebrities/:id/edit
+router.get('/:id/edit', (req, res) => {
+  let celebrityId = req.params.id;
+  Celebrity.findById( celebrityId )
+  .then( celebrity => {
+    let occupations = [ "comedian", "movie star", "singer", "unknown" ];
+    occupations = occupations.map( occupation => {
+      if (occupation === celebrity.occupation)
+        return { occupation: occupation, isValue: true }
+      else
+      return { occupation: occupation, isValue: false }
+    } )
+    res.render( 'celebrities/edit', { celebrity, occupations });
+  })
+  .catch( err => { throw err });
+});
+
+// POST /celebrities/:id/update
+router.post('/:id/update', (req, res) => {
+  let id = req.params.id;
+  let {name, occupation, catchPhrase} = req.body;
+  Celebrity.findByIdAndUpdate( id, {name, occupation, catchPhrase} )
+  .then( updatedCelebrity => {
+    res.redirect( '/celebrities/' + updatedCelebrity._id.toString() );
+  })
+  .catch( err => { throw err });
+});
+
 // GET /celebrities/:id/delete
 router.get('/:id/delete', (req, res) => {
   let celebrityId = req.params.id;
