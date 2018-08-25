@@ -7,6 +7,7 @@ var sassMiddleware = require('node-sass-middleware');
 var mongoose = require('mongoose');
 var indexRouter = require('./routes/index');
 var celebritiesRouter = require('./routes/celebrities');
+var moviesRouter = require('./routes/movies');
 
 mongoose.Promise = Promise;
 mongoose
@@ -39,6 +40,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/celebrities', celebritiesRouter);
+app.use('/movies', moviesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
