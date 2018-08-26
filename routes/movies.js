@@ -37,7 +37,7 @@ router.get('/:id', (req, res) => {
     let movieData = {
       title: movie.title,
       plot: movie.plot,
-      genre: movie.genre.join(", ")
+      genre: movie.genre.join(", ")       // genre is an array of strings, so we need to join(", ") as a string before passing it to the view
     }
     res.render( 'movies/show', movieData );
   })
