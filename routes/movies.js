@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var Movie = require('../models/Movie');
 
-/* GET /movies */
+// GET /movies
 router.get('/', function(req, res, next) {
   Movie.find()
   .then( movies => {
@@ -34,7 +34,12 @@ router.get('/:id', (req, res) => {
   let movieId = req.params.id;
   Movie.findById( movieId )
   .then( movie => {
-    res.render( 'movies/show', movie );
+    let movieData = {
+      title: movie.title,
+      plot: movie.plot,
+      genre: movie.genre.join(", ")
+    }
+    res.render( 'movies/show', movieData );
   })
   .catch( err => { throw err });
 });

@@ -4,15 +4,6 @@ const phrases = require('../data/phrases');
 const Celebrity = require('../models/Celebrity');
 const Movie = require('../models/Movie');
 
-mongoose.Promise = Promise;
-mongoose
-  .connect('mongodb://localhost/celebrities', { useNewUrlParser: true })
-  .then(() => {
-    console.log('Connected to Mongo!')
-  }).catch(err => {
-    console.error('Error connecting to mongo', err)
-  });
-
 // simple function to get a random occupation
 function randomValues(arr, times=1) {
   var result = [];
@@ -20,7 +11,7 @@ function randomValues(arr, times=1) {
     let randomNum = Math.floor(Math.random() * arr.length);
     if ( !result.includes( arr[randomNum] )) result.push( arr[randomNum] );
   }
-  return result.join(", ");
+  return result;
 }
 
 // here we create an array of 50 celebrities objects
@@ -29,7 +20,7 @@ let celebrities = [];
 
 for (let i = 0; i < 50; i++) {
   let name = faker.name.firstName() + " " + faker.name.lastName();
-  let occupation = randomValues( [ "movie star", "singer", "comedian", "unknown" ] );
+  let occupation = randomValues( [ "movie star", "singer", "comedian", "unknown" ] ).toString();
   let catchPhrase = phrases[i].replace("Chuck Norris", name);
   celebrities.push({ name, occupation, catchPhrase })
 }
@@ -45,7 +36,14 @@ for (let i = 0; i < 50; i++) {
   movies.push({ title, genre, plot })
 }
 
-
+mongoose.Promise = Promise;
+mongoose
+  .connect('mongodb://localhost/celebrities', { useNewUrlParser: true })
+  .then(() => {
+    console.log('Connected to Mongo!')
+  }).catch(err => {
+    console.error('Error connecting to mongo', err)
+  });
 
 // seeding the database
 Celebrity.deleteMany()            // deleting the celebrities collection if it exists
