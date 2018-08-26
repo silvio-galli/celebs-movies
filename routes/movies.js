@@ -20,7 +20,7 @@ router.get('/new', (req, res) => {
 router.get('/create', (req, res) => {
   let title = req.query.title;
   let plot =  req.query.plot;
-  let genre = req.query.genre.match(/\b\w+\b/g).join(', ');
+  let genre = req.query.genre.match(/\b\w+\b/g);
   
   Movie.create({title, plot, genre})
   .then(newMovie => {
@@ -49,7 +49,13 @@ router.get('/:id/edit', (req, res) => {
   let movieId = req.params.id;
   Movie.findById( movieId )
   .then( movie => {
-    res.render( 'movies/edit', movie);
+    let movieData = {
+      _id: movie._id,
+      title: movie.title,
+      plot: movie.plot,
+      genre: movie.genre.join(", ")
+    }
+    res.render( 'movies/edit', movieData);
   })
   .catch( err => { throw err });
 });
@@ -59,7 +65,7 @@ router.post('/:id/update', (req, res) => {
   let id = req.params.id;
   let title = req.body.title;
   let plot =  req.body.plot;
-  let genre = req.body.genre.match(/\b\w+\b/g).join(', ');
+  let genre = req.body.genre.match(/\b\w+\b/g);
   Movie.findByIdAndUpdate( id, {title, plot, genre} )
   .then( updatedMovie => {
     res.redirect( '/movies/' + updatedMovie._id.toString() );
