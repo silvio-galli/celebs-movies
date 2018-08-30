@@ -5,9 +5,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var sassMiddleware = require('node-sass-middleware');
 var mongoose = require('mongoose');
-var indexRouter = require('./routes/index');
-var celebritiesRouter = require('./routes/celebrities');
-var moviesRouter = require('./routes/movies');
+const session = require('express-session');
+const MongoStore= require('connect-mongo')(session);
 
 mongoose.Promise = Promise;
 mongoose
@@ -19,6 +18,20 @@ mongoose
   });
 
 var app = express();
+
+// session middleware
+app.use(session({
+  secret: 'celebs session data',
+  cookie: {
+    maxAge: 3600000
+  },
+  resave: false,
+  saveUninitialized: true,
+  store: new MongoStore({
+    url: 'mongodb://localhost/celebrities',
+    ttl: 24 *3600
+  })
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -37,10 +50,15 @@ app.use(sassMiddleware({
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+var indexRouter = require('./routes/index');
+var celebritiesRouter = require('./routes/celebrities');
+var moviesRouter = require('./routes/movies');
+const usersRoutes = require('./routes/users');
 
 app.use('/', indexRouter);
 app.use('/celebrities', celebritiesRouter);
 app.use('/movies', moviesRouter);
+app.use('/users', usersRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
