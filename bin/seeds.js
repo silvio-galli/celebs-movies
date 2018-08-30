@@ -36,7 +36,7 @@ for (let i = 0; i < 50; i++) {
   let catchPhrase = phrases[i].replace("Chuck Norris", name);
   celebrities.push({ name, occupation, catchPhrase })
 }
-
+console.log( "CELEBRITIES -->", celebrities )
 // here we create an array of 50 movies objects
 // to pass inside the Movie.create() promise
 let movies = [];
@@ -51,6 +51,8 @@ for (let i = 0; i < 50; i++) {
   let plot = faker.lorem.paragraph();     // calling the faker package to create a random paragraph
   movies.push({ title, genre, plot })
 }
+
+console.log( "MOVIES -->", movies );
 
 mongoose.Promise = Promise;
 mongoose

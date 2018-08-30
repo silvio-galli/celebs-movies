@@ -18,6 +18,7 @@ router.get('/new', (req, res) => {
 
 // GET /movies/create
 router.get('/create', (req, res) => {
+  console.log( "REQ QUERY -->", req.query )
   let title = req.query.title;
   let plot =  req.query.plot;
   let genre = req.query.genre.match(/\b\w+\b/g);
