@@ -1,7 +1,9 @@
 var express = require('express');
 var router = express.Router();
 const Movie = require('../models/Movie');
+const Celebrity = require("../models/Celebrity");
 const Actor = require("../models/Actor");
+const mongoose = require("mongoose");
 
 const genres = [
   {genre: "action", selected: false},
@@ -40,7 +42,9 @@ router.get('/', function(req, res, next) {
 
 // GET /movies/new
 router.get('/new', (req, res) => {
-  res.render('movies/new');
+  Celebrity.find({"occupation": "movie star"}).sort({ "lastName": 1 }).then( actors => {
+    res.render('movies/new', { actors });
+  })
 });
 
 
@@ -50,9 +54,23 @@ router.get('/create', (req, res) => {
   let title = req.query.title;
   let plot =  req.query.plot;
   let genre = req.query.genre.match(/\b\w+\b/g);
-  
-  Movie.create({title, plot, genre})
-  .then(newMovie => {
+  let cast = req.query.cast;
+
+  let movie = new Movie({
+    title, plot, genre
+  })
+
+  let actors = cast.map( value => {
+    let actor = new Actor({
+      _movie: movie._id,
+      _celebrity: mongoose.Types.ObjectId(value)
+    })
+    return actor.save();
+  })
+  Promise.all([movie.save(), ...actors])
+  .then( results => {
+    let [ newMovie, ...actors ] = results;
+    console.log( "RESULTS new movie", results );
     res.redirect('/movies/' + newMovie._id.toString());
   })
   .catch( err => { throw err });

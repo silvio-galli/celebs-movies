@@ -9,6 +9,15 @@ $(document).ready( function() {
   if ( plots.length !== 0 ) {
     shortenText(plots);
   }
+
+  $("#addSelect").on("click", function(e) {
+    e.preventDefault();
+    let newSelect = $("#cast-1").clone();
+    let num = $(".cast").length;
+    newSelect.attr("id", "cast" + (num + 1) )
+    console.log( newSelect );
+    $("#cast").append(newSelect);
+  })
 })
 
 

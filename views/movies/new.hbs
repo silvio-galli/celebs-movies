@@ -19,6 +19,20 @@
         <label for="plot">Plot</label>
         <textarea name="plot" class="form-control" placeholder="Enter the plot of the Movie"></textarea>
       </div>
+      <div class="form-group" id="cast">
+        <label for="cast">Cast</label>
+        <select name="cast" class="cast" id="cast-1">
+          <option value="">select</option>
+          {{#each actors}}
+            <option value="{{this._id}}">{{this.lastName}} {{this.firstName}}</option>            
+          {{/each}}
+        </select>
+        <strong>
+         <a href="" id="addSelect">
+           +
+         </a>
+        </strong>
+      </div>
       <div class="form-group">
         <button type="submit" class="btn btn-success">Save</button>
       </div>
