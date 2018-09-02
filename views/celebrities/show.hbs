@@ -1,11 +1,18 @@
 <div class="row">
   <div class="col-md-8">
-    <h2>{{name}} <small>page</small></h2>
+    <h2>{{firstName}} {{lastName}}</h2>
   </div>
   <div class="col-md-4">
     <a href="/celebrities/{{_id}}/edit" class="btn btn-primary btn-sm">Update</a>
     <a href="/celebrities/{{_id}}/delete" class="btn btn-danger btn-sm">Delete</a>
   </div>
 </div>
-<p><strong>Occupation:</strong> {{occupation}}</p>
-<p><strong>Catch Phrase:</strong> {{catchPhrase}}</p>
+<div class="row">
+  <div class="col-md-2">
+    <img src="{{pictureUrl}}" class="img-fluid" alt="">
+  </div>
+  <div class="col-md-6">
+    <p><strong>Occupation:</strong> {{occupation}}</p>
+    <p><strong>Catch Phrase:</strong> {{catchPhrase}}</p>
+  </div>
+</div>
