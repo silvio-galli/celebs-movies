@@ -1,12 +1,35 @@
 var express = require('express');
 var router = express.Router();
 var Movie = require('../models/Movie');
+const genres = [
+  {genre: "action", selected: false},
+  {genre: "adventure", selected: false},
+  {genre: "comedy", selected: false},
+  {genre: "doc", selected: false},
+  {genre: "drama", selected: false},
+  {genre: "fantasy", selected: false},
+  {genre: "romantic", selected: false},
+  {genre: "science-fiction", selected: false},
+];
 
 // GET /movies
 router.get('/', function(req, res, next) {
+  if (req.query && req.query.filter) {
+    Movie.find({ "genre": { $in: [ req.query.filter ] } })
+  .then( movies => {
+    res.render('movies/index', {
+      movies,
+      "genres": genres.map( item => {
+        item.selected = item.genre === req.query.filter ? true : false;
+        return item;
+      })
+    });
+  })
+  .catch( err => { throw err });  
+  }
   Movie.find()
   .then( movies => {
-    res.render('movies/index', { movies });
+    res.render('movies/index', { movies, genres });
   })
   .catch( err => { throw err });
 });

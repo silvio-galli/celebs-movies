@@ -1,5 +1,31 @@
-<h1>Movies</h1>
-<a href="/movies/new" class="btn btn-primary">New Movie</a>
+<div class="row">
+  <div class="col-md-6 m-3">
+    <h1>
+      Movies
+      <small>
+        <a href="/movies/new" class="btn btn-primary">New Movie</a>
+      </small>
+    </h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <form action="/movies" method="get" class="form-inline">
+      <select name="filter" class="form-control">
+        <option value="">Filter by genre</option>
+        {{#each genres}}
+          {{#if selected}}
+            <option value="{{this.genre}}" selected>{{this.genre}}</option>
+          {{else}}
+          <option value="{{this.genre}}">{{this.genre}}</option>
+          {{/if}}
+        {{/each}}
+      </select>
+      <button type="submit" class="btn btn-success">Filter</button>
+    </form>
+  </div>
+</div>
 
 <div class="row">
   <div class="col-md-8">

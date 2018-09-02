@@ -1,7 +1,29 @@
 <div class="row">
-  <div class="col-md-12 m-3">
-    <h1>Celebrities</h1>
-    <a href="/celebrities/new" class="btn btn-primary">New Celebrity</a>
+  <div class="col-md-6 m-3">
+    <h1>
+      Celebrities
+      <small>
+        <a href="/celebrities/new" class="btn btn-primary">New Celebrity</a>
+      </small>
+    </h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <form action="/celebrities" method="get" class="form-inline">
+      <select name="filter" class="form-control">
+        <option value="">Filter by occupation</option>
+        {{#each occupations}}
+          {{#if selected}}
+            <option value="{{this.occupation}}" selected>{{this.occupation}}</option>
+          {{else}}
+          <option value="{{this.occupation}}">{{this.occupation}}</option>
+          {{/if}}
+        {{/each}}
+      </select>
+      <button type="submit" class="btn btn-success">Filter</button>
+    </form>
   </div>
 </div>
 

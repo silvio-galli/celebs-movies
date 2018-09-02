@@ -49,7 +49,6 @@ app.use(sassMiddleware({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 var indexRouter = require('./routes/index');
 var celebritiesRouter = require('./routes/celebrities');
 var moviesRouter = require('./routes/movies');

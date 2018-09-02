@@ -1,14 +1,34 @@
 var express = require('express');
 var router = express.Router();
 var Celebrity = require('../models/Celebrity');
+const occupations = [
+  {occupation: "comedian", selected: false},
+  {occupation: "movie star", selected: false},
+  {occupation: "singer", selected: false},
+  {occupation: "unknown", selected: false},
+];
 
 // GET /celebrities
-router.get('/', function(req, res, next) {
-  Celebrity.find()
-  .then( celebrities => {
-    res.render('celebrities/index', { celebrities });
-  })
-  .catch( err => { throw err });
+router.get('/', (req, res, next) => {
+  if ( req.query && req.query.filter) {
+    Celebrity.find({ "occupation": req.query.filter })
+    .then( celebrities => {
+      res.render('celebrities/index', {
+        celebrities,
+        "occupations": occupations.map( item => {
+          item.selected = item.occupation === req.query.filter ? true : false;
+          return item;
+        })
+      });
+    })
+    .catch( err => { throw err });  
+  } else {
+    Celebrity.find()
+    .then( celebrities => {
+      res.render('celebrities/index', { celebrities, occupations });
+    })
+    .catch( err => { throw err });
+  }
 });
 
 // GET /celebrities/new
