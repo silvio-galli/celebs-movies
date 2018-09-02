@@ -1,7 +1,11 @@
 ul {
-  padding-left: 0; }
+  padding-left: 0;
+  list-style: none; }
 
 #celebrities-list .card {
   font-size: 0.8em; }
+
+.signup-home {
+  color: #ccc; }
 
 /*# sourceMappingURL=style.css.map */

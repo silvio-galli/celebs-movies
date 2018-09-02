@@ -5,8 +5,8 @@ const Celebrity = require("../models/Celebrity");
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  Celebrity.find().sort({"createdAt": -1}).limit(5).then( celebrities => {
-    Movie.find().sort({"createdAt": -1}).limit(5).then( movies => {
+  Celebrity.find().sort({"created_at": -1}).limit(5).then( celebrities => {
+    Movie.find().sort({"created_at": -1}).limit(5).then( movies => {
       res.render('index', { celebrities, movies });
     })
   })
