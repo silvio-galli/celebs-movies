@@ -1,11 +1,7 @@
 ul {
   padding-left: 0; }
 
-#celebrities-list {
-  list-style: none; }
-  #celebrities-list li {
-    border-bottom: 1px solid #888888;
-    padding-top: 20px;
-    padding-bottom: 20px; }
+#celebrities-list .card {
+  font-size: 0.8em; }
 
 /*# sourceMappingURL=style.css.map */

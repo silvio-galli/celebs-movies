@@ -6,6 +6,13 @@ const phrases = require('../data/phrases');
 const Celebrity = require('../models/Celebrity');
 const Movie = require('../models/Movie');
 
+mongoose
+  .connect('mongodb://localhost/celebrities', { useNewUrlParser: true })
+  .then(() => {
+    console.log('Connected to Mongo!')
+  }).catch(err => {
+    console.error('Error connecting to mongo', err)
+  });
 
 // simple function to get a random value from an array
 // the result will be an array, so,
@@ -33,8 +40,9 @@ for (let i = 0; i < 50; i++) {
   // As the occupation field in Celebrity document is a String type
   // we need to access the value of the only element inside the array and set its value to the variable
   let occupation = randomValues( [ "movie star", "singer", "comedian", "unknown" ] )[0];
-  let catchPhrase = phrases[i].replace("Chuck Norris", name);
-  celebrities.push({ name, occupation, catchPhrase })
+  let catchPhrase = phrases[i].replace(new RegExp("Chuck Norris", "gi"), name);
+  let newCelebrity = new Celebrity({ name, occupation, catchPhrase });  // creating an instance of the model like this and pushing this instance into a global variable, permit to have access to the id of the instance evrywhere in the seeds file
+  celebrities.push(newCelebrity);
 }
 console.log( "CELEBRITIES -->", celebrities )
 // here we create an array of 50 movies objects
@@ -54,44 +62,40 @@ for (let i = 0; i < 50; i++) {
 
 console.log( "MOVIES -->", movies );
 
-mongoose.Promise = Promise;
-mongoose
-  .connect('mongodb://localhost/celebrities', { useNewUrlParser: true })
-  .then(() => {
-    console.log('Connected to Mongo!')
-  }).catch(err => {
-    console.error('Error connecting to mongo', err)
-  });
 
 // seeding the database
 Celebrity.deleteMany()                       // deleting the celebrities collection if it exists
 .then( () => {
   return Movie.deleteMany()                  // deleting the movies collection if it exists
   .then(() => {
-    return Celebrity.create( celebrities );  // creating the new celebrities collection
+    return Promise.all(
+      celebrities.map( celebrity => {
+        return celebrity.save();  // creating the new celebrities collection
+      })
+    )
   })
   .then( newCelebrities => {
     // here we can see in the console the result of Celebrity.create( celebrities );
-    console.log( chalk.black.bgYellow("< -- START -- >") )
+    console.log( chalk.black.bgYellow("< -- New Celebrities START -- >") )
     console.log( success("New celebrities list:") )
     console.log( "\n" );    
     console.log( newCelebrities );
     console.log( "\n" );
     console.log( success(newCelebrities.length + " new celebrities created!") );
-    console.log( chalk.black.bgYellow("< -- END -- >") )
+    console.log( chalk.black.bgYellow("< -- New Celebrities END -- >") )
     console.log( "\n" );
 
     return Movie.create( movies );          // creating the new movies collection
   })
   .then( newMovies => {
     // here we can see in the console the result of Movie.create( movies );
-    console.log( chalk.black.bgYellow("< -- START -- >") )
+    console.log( chalk.black.bgYellow("< -- New Movies START -- >") )
     console.log( success("New movies list:") );
     console.log( "\n" );
     console.log( newMovies );
     console.log( "\n" );
     console.log( success( newMovies.length + " new Movies created!" ) );
-    console.log( chalk.black.bgYellow("< -- END -- >") )
+    console.log( chalk.black.bgYellow("< -- New Movies END -- >") )
     console.log( "\n" );
 
     mongoose.connection.close();            // closing connection to DB

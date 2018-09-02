@@ -1,18 +1,51 @@
-<h1>Celebrities</h1>
-<a href="/celebrities/new" class="btn btn-primary">New Celebrity</a>
-
 <div class="row">
+  <div class="col-md-12 m-3">
+    <h1>Celebrities</h1>
+    <a href="/celebrities/new" class="btn btn-primary">New Celebrity</a>
+  </div>
+</div>
+
+<div class="row" id="celebrities-list">
+  {{#each celebrities}}
+  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+    <div class="card my-2">
+      <img class="card-img-top" src="{{this.pictureUrl}}" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">
+          {{this.name}}
+        </h5>
+        <p class="card-text">
+          <strong>Occupation:</strong><br />{{this.occupation}}
+        </p>
+        <a href="/celebrities/{{this._id}}" class="btn btn-sm btn-outline-info">Details</a>
+        <a href="/celebrities/{{this._id}}/edit" class="btn btn-primary btn-sm">Update</a>
+        <a href="/celebrities/{{this._id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+      </div>
+    </div>
+  </div>
+  {{/each}}
+</div>
+
+
+{{!-- <div class="row">
   <div class="col-md-4">
     <ul id="celebrities-list">
       {{#each celebrities}}
         <li class="my-3">
           <div class="row">
-            <div class="col-md-6">
-              <a href="/celebrities/{{this._id}}">
-                {{this.name}}
-              </a>
+            <div class="col-md-4">
+              <img src="/images/celebrity.jpg" alt="" class="img-fluid" />
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+              <strong>
+                <a href="/celebrities/{{this._id}}">
+                  {{this.name}}
+                </a>
+              </strong>
+              <br />
+              <small><strong>occupation:</strong></small> {{this.occupation}}
+            </div>
+            <div class="col-md-4">
               <a href="/celebrities/{{this._id}}/edit" class="btn btn-primary btn-sm">Update</a>
               <a href="/celebrities/{{this._id}}/delete" class="btn btn-danger btn-sm">Delete</a>
             </div>
@@ -21,4 +54,4 @@
       {{/each}}
     </ul>
   </div>
-</div>
+</div> --}}
