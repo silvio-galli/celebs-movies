@@ -8,9 +8,8 @@ var mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore= require('connect-mongo')(session);
 
-mongoose.Promise = Promise;
 mongoose
-  .connect('mongodb://localhost/celebrities', { useNewUrlParser: true })
+  .connect('mongodb://localhost/celebs-movies', { useNewUrlParser: true })
   .then(() => {
     console.log('Connected to Mongo!')
   }).catch(err => {
@@ -28,7 +27,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   store: new MongoStore({
-    url: 'mongodb://localhost/celebrities',
+    url: 'mongodb://localhost/celebs-movies',
     ttl: 24 *3600
   })
 }));

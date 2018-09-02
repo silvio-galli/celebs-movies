@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var Movie = require('../models/Movie');
+const Movie = require('../models/Movie');
+const Actor = require("../models/Actor");
+
 const genres = [
   {genre: "action", selected: false},
   {genre: "adventure", selected: false},
@@ -11,6 +13,7 @@ const genres = [
   {genre: "romantic", selected: false},
   {genre: "science-fiction", selected: false},
 ];
+
 
 // GET /movies
 router.get('/', function(req, res, next) {
@@ -34,10 +37,12 @@ router.get('/', function(req, res, next) {
   .catch( err => { throw err });
 });
 
+
 // GET /movies/new
 router.get('/new', (req, res) => {
   res.render('movies/new');
 });
+
 
 // GET /movies/create
 router.get('/create', (req, res) => {
@@ -53,20 +58,26 @@ router.get('/create', (req, res) => {
   .catch( err => { throw err });
 });
 
+
 // GET /movies/:id
 router.get('/:id', (req, res) => {
   let movieId = req.params.id;
   Movie.findById( movieId )
   .then( movie => {
-    let movieData = {
-      title: movie.title,
-      plot: movie.plot,
-      genre: movie.genre.join(", ")       // genre is an array of strings, so we need to join(", ") as a string before passing it to the view
-    }
-    res.render( 'movies/show', movieData );
+    Actor.find({ "_movie": movie._id })
+    .populate("_celebrity")
+    .then( actors => {
+      let movieData = {
+        title: movie.title,
+        plot: movie.plot,
+        genre: movie.genre.join(", ")       // genre is an array of strings, so we need to join(", ") as a string before passing it to the view
+      }
+      res.render( 'movies/show', { movie: movieData, actors } );
+    })
   })
   .catch( err => { throw err });
 });
+
 
 // GET /movies/:id/edit
 router.get('/:id/edit', (req, res) => {
@@ -84,6 +95,7 @@ router.get('/:id/edit', (req, res) => {
   .catch( err => { throw err });
 });
 
+
 // POST /movies/:id/update
 router.post('/:id/update', (req, res) => {
   let id = req.params.id;
@@ -97,6 +109,7 @@ router.post('/:id/update', (req, res) => {
   .catch( err => { throw err });
 });
 
+
 // GET /movies/:id/delete
 router.get('/:id/delete', (req, res) => {
   let movieId = req.params.id;
@@ -107,6 +120,5 @@ router.get('/:id/delete', (req, res) => {
   })
   .catch( err => { throw err });
 });
-
 
 module.exports = router;

@@ -5,9 +5,10 @@ const faker = require('faker');
 const phrases = require('../data/phrases');
 const Celebrity = require('../models/Celebrity');
 const Movie = require('../models/Movie');
+const Actor = require('../models/Actor');
 
 mongoose
-  .connect('mongodb://localhost/celebrities', { useNewUrlParser: true })
+  .connect('mongodb://localhost/celebs-movies', { useNewUrlParser: true })
   .then(() => {
     console.log('Connected to Mongo!')
   }).catch(err => {
@@ -28,10 +29,22 @@ function randomValues(arr, times = 1) { // times parameter if not present defaul
   return result;
 }
 
-// here we create an array of 50 celebrities objects
+// here we create an array celebrity objects
 // to pass inside the Celebrity.create() promise
 let celebrities = [];
 
+// creating 20 movie stars
+for (let i = 0; i < 20; i++) {
+  let firstName = faker.name.firstName() // calling faker to generate the firstName
+  let lastName = faker.name.lastName() // calling faker to generate the lastName
+  let occupation = "movie star";
+  let catchPhrase = phrases[i].replace(new RegExp("Chuck", "gi"), `${firstName}`);
+  catchPhrase = catchPhrase.replace(new RegExp("Norris", "gi"), `${lastName}`);
+  let newCelebrity = new Celebrity({ firstName, lastName, occupation, catchPhrase });  // creating an instance of the model like this and pushing this instance into a global variable, permit to have access to the id of the instance evrywhere in the seeds file
+  celebrities.push(newCelebrity);
+}
+
+// creating 50 random celebrities
 for (let i = 0; i < 50; i++) {
   let firstName = faker.name.firstName() // calling faker to generate the firstName
   let lastName = faker.name.lastName() // calling faker to generate the lastName
@@ -47,17 +60,33 @@ for (let i = 0; i < 50; i++) {
   celebrities.push(newCelebrity);
 }
 console.log( "CELEBRITIES -->", celebrities )
+
+// To use when creating links between celebrity and movie
+let movieStars = celebrities.filter( celebrity => celebrity.occupation === "movie star" );
+
+
 // here we create an array of 50 movies objects
 // to pass inside the Movie.create() promise
 let movies = [];
-const genres = ["action", "romantic", "drama", "adventure", "comedy", "science-fiction", "fantasy", "doc"];
+const genres = ["action", "romantic", "drama", "adventure", "comedy", "science-fiction", "fantasy"];
 for (let i = 0; i < 50; i++) {
   let randNum = Math.ceil(Math.random() * 3);   // generates a random number between 1 and 3
   let title = faker.lorem.sentence();     // calling the faker package to create a random sentence
   // now we call the randomValues function
   // pass genres array and randNum as parameters
   // to generate an array of 1 to 3 strings
-  let genre = randomValues( genres, randNum ); 
+  let genre = randomValues( genres, randNum );
+  let plot = faker.lorem.paragraph();     // calling the faker package to create a random paragraph
+  movies.push({ title, genre, plot })
+}
+
+// creating 8 "doc" movies
+for (let i = 0; i < 8; i++) {
+  let title = faker.lorem.sentence();     // calling the faker package to create a random sentence
+  // now we call the randomValues function
+  // pass genres array and randNum as parameters
+  // to generate an array of 1 to 3 strings
+  let genre = ["doc"];
   let plot = faker.lorem.paragraph();     // calling the faker package to create a random paragraph
   movies.push({ title, genre, plot })
 }
@@ -68,7 +97,10 @@ console.log( "MOVIES -->", movies );
 // seeding the database
 Celebrity.deleteMany()                       // deleting the celebrities collection if it exists
 .then( () => {
-  return Movie.deleteMany()                  // deleting the movies collection if it exists
+  return Movie.deleteMany()
+  .then( () => {
+    return Actor.deleteMany();
+  })                  // deleting the movies collection if it exists
   .then(() => {
     return Promise.all(
       celebrities.map( celebrity => {
@@ -100,8 +132,29 @@ Celebrity.deleteMany()                       // deleting the celebrities collect
     console.log( chalk.black.bgYellow("< -- New Movies END -- >") )
     console.log( "\n" );
 
-    mongoose.connection.close();            // closing connection to DB
+    let noDocs = newMovies.filter( movie => !movie.genre.includes("doc"));
+
+    let actors = [];
+    noDocs.map( movie => {
+      let players = movieStars.slice(0);
+      for ( let i = 0; i < 3; i++) {
+        let player = randomValues(players)[0];
+        var actor = new Actor({
+          _movie: movie,
+          _celebrity: player
+        });
+        actors.push( actor.save() );
+        players.splice(players.indexOf(player), 1) // splice the players array to avoid duplication
+        console.log( chalk.black.bgYellow( "Players.length", players.length) );
+      }
+    })
+    
+    return Promise.all( actors )
   })
+  .then( newActors => {
+    console.log( "Actors -->", newActors )
+    mongoose.connection.close();            // closing connection to DB
+  } )
   .catch( err => { throw err });
 } )
 .catch( err => { throw err });

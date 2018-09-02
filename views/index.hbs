@@ -1,4 +1,4 @@
-<h1>{{title}}</h1>
+<h1>Welcome to Celebs</h1>
 {{#if message}}
   <div class="alert alert-warning alert-dismissible fade show" role="alert">
     <strong>Welcome!</strong>
@@ -7,4 +7,36 @@
     </button>
   </div>
 {{/if }}
-<p>Welcome to {{title}}</p>
+
+<div class="row">
+  <div class="col-md-6">
+    <h2>Latest Celebs</h2>
+    <ul>
+      {{#each celebrities}}
+        <li>
+          <a href="/celebrities/{{this._id}}">
+            {{this.firstName}} {{this.lastName}}
+          </a>
+        </li>
+      {{/each}}
+    </ul>
+    <a href="/celebrities" class="btn btn-outline-primary">
+      All Celebrities
+    </a>
+  </div>
+  <div class="col-md-6">
+    <h2>Latest Movies</h2>
+    <ul>
+      {{#each movies}}
+        <li>
+          <a href="/movies/{{this._id}}">
+            {{this.title}}
+          </a>
+        </li>
+      {{/each}}
+    </ul>
+    <a href="/movies" class="btn btn-outline-primary">
+      All Movies
+    </a>
+  </div>
+</div>

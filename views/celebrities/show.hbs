@@ -1,18 +1,28 @@
 <div class="row">
   <div class="col-md-8">
-    <h2>{{firstName}} {{lastName}}</h2>
+    <h2>{{celebrity.firstName}} {{celebrity.lastName}}</h2>
   </div>
   <div class="col-md-4">
-    <a href="/celebrities/{{_id}}/edit" class="btn btn-primary btn-sm">Update</a>
-    <a href="/celebrities/{{_id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+    <a href="/celebrities/{{celebrity._id}}/edit" class="btn btn-primary btn-sm">Update</a>
+    <a href="/celebrities/{{celebrity._id}}/delete" class="btn btn-danger btn-sm">Delete</a>
   </div>
 </div>
 <div class="row">
   <div class="col-md-2">
-    <img src="{{pictureUrl}}" class="img-fluid" alt="">
+    <img src="{{celebrity.pictureUrl}}" class="img-fluid" alt="">
   </div>
   <div class="col-md-6">
-    <p><strong>Occupation:</strong> {{occupation}}</p>
-    <p><strong>Catch Phrase:</strong> {{catchPhrase}}</p>
+    <p><strong>Occupation:</strong> {{celebrity.occupation}}</p>
+    <p><strong>Catch Phrase:</strong> {{celebrity.catchPhrase}}</p>
+    <h3>Movies:</h3>
+    <ul>
+      {{#each actors}}
+        <li>
+          <a href="/movies/{{this._movie._id}}">
+            {{this._movie.title}}
+          </a>
+        </li>
+      {{/each}}
+    </ul>
   </div>
 </div>

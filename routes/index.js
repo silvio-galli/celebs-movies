@@ -1,9 +1,15 @@
 var express = require('express');
 var router = express.Router();
+const Movie = require("../models/Movie");
+const Celebrity = require("../models/Celebrity");
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  Celebrity.find().sort({"createdAt": -1}).limit(5).then( celebrities => {
+    Movie.find().sort({"createdAt": -1}).limit(5).then( movies => {
+      res.render('index', { celebrities, movies });
+    })
+  })
 });
 
 module.exports = router;

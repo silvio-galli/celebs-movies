@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var Celebrity = require('../models/Celebrity');
+const Actor = require('../models/Actor');
+
 const occupations = [
   {occupation: "comedian", selected: false},
   {occupation: "movie star", selected: false},
@@ -56,7 +58,12 @@ router.get('/:id', (req, res) => {
   let celebrityId = req.params.id;
   Celebrity.findById( celebrityId )
   .then( celebrity => {
-    res.render( 'celebrities/show', celebrity );
+    Actor.find( { _celebrity: celebrity._id } )
+    .populate( "_movie" )
+    .then( actors => {
+      console.log( "ACTORS-->", actors )
+      res.render( 'celebrities/show', { celebrity, actors} );
+    } )
   })
   .catch( err => { throw err });
 });
