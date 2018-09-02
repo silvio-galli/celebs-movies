@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-6 m-3">
+  <div class="col-md-6">
     <h1>
       Movies
       <small>
@@ -7,9 +7,6 @@
       </small>
     </h1>
   </div>
-</div>
-
-<div class="row">
   <div class="col-md-6">
     <form action="/movies" method="get" class="form-inline">
       <select name="filter" class="form-control">
@@ -28,27 +25,29 @@
 </div>
 
 <div class="row">
-  <div class="col-md-8">
-    <ul>
-      {{#each movies}}
-        <li class="my-3">
-          <div class="row">
-            <div class="col-md-6">
-              <a href="/movies/{{this._id}}">
-                {{this.title}}
-              </a>
-              <p class="muted">
-                <strong>Genre:</strong>
-                {{this.genre}}
-              </p>  
-            </div>
-            <div class="col-md-6">
-              <a href="/movies/{{this._id}}/edit" class="btn btn-primary btn-sm">Update</a>
-              <a href="/movies/{{this._id}}/delete" class="btn btn-danger btn-sm">Delete</a>
-            </div>
-          </div>
-        </li>
-      {{/each}}
-    </ul>
-  </div>
+  {{#each movies}}
+
+    <div class="col-md-6 col-12">
+      <div class="card my-2">
+        <img class="card-img-top" src="{{this.poster}}" alt="Card image cap">
+        <div class="card-body">
+          <a href="/movies/{{this._id}}">
+            <h5 class="card-title">{{this.title}}</h5>
+          </a>
+          <p class="card-text">
+              <strong>Genre:</strong> {{this.genre}}
+            </p>
+          <p class="card-text">
+            <strong>Plot:</strong>
+            <span class="plot">
+              {{this.plot}}
+            </span>
+          </p>
+          <a href="/movies/{{this._id}}/edit" class="btn btn-primary btn-sm">Update</a>
+          <a href="/movies/{{this._id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+        </div>
+      </div>
+    </div>
+
+  {{/each}}
 </div>

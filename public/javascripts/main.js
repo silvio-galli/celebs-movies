@@ -2,7 +2,12 @@
 $(document).ready( function() {
   let phrases = $(".catch-phrase");
   if ( phrases.length !== 0 ) {
-    shortenPhrases(phrases);
+    shortenText(phrases);
+  }
+
+  let plots = $(".plot");
+  if ( plots.length !== 0 ) {
+    shortenText(plots);
   }
 })
 
@@ -35,16 +40,16 @@ $(document).ready( function() {
 // GET /celebrities
 // cut catch phrase to the length of the shortest one
 // to keep the celebrities grid consistent
-function shortenPhrases(phrases) {
-  let shortest = 5000;
-  phrases.filter( function() {
-    let phrase = $(this).text().trim();
-    if (phrase.length < shortest)
-      shortest = phrase.length
+function shortenText(strings) {
+  let shortest = 10000;
+  strings.map( function() {
+    let string = $(this).text().trim();
+    if (string.length < shortest)
+      shortest = string.length
   });
-  return phrases.map( function() {
-    let phrase = $(this).text().trim();
-    let newText = phrase.length > shortest ? phrase.slice(0, shortest - 4) + "..." : phrase;
-    return $(this).text( newText );
-  })  
+  return strings.map( function() {
+    let string = $(this).text().trim();
+    let newString = string.length > shortest ? string.slice(0, shortest - 4) + "..." : string;
+    return $(this).text( newString );
+  })
 }
