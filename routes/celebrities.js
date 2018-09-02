@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var Celebrity = require('../models/Celebrity');
 
-/* GET /celebrities */
+// GET /celebrities
 router.get('/', function(req, res, next) {
   Celebrity.find()
   .then( celebrities => {

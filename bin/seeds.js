@@ -33,15 +33,17 @@ function randomValues(arr, times = 1) { // times parameter if not present defaul
 let celebrities = [];
 
 for (let i = 0; i < 50; i++) {
-  let name = faker.name.firstName() + " " + faker.name.lastName(); // calling faker two times to generate the name
+  let firstName = faker.name.firstName() // calling faker to generate the firstName
+  let lastName = faker.name.lastName() // calling faker to generate the lastName
   // now we call the randomValues function
   // pass only [ "movie star", "singer", "comedian", "unknown" ] array as parameter
   // to generate an array containing only one element
   // As the occupation field in Celebrity document is a String type
   // we need to access the value of the only element inside the array and set its value to the variable
   let occupation = randomValues( [ "movie star", "singer", "comedian", "unknown" ] )[0];
-  let catchPhrase = phrases[i].replace(new RegExp("Chuck Norris", "gi"), name);
-  let newCelebrity = new Celebrity({ name, occupation, catchPhrase });  // creating an instance of the model like this and pushing this instance into a global variable, permit to have access to the id of the instance evrywhere in the seeds file
+  let catchPhrase = phrases[i].replace(new RegExp("Chuck", "gi"), `${firstName}`);
+  catchPhrase = catchPhrase.replace(new RegExp("Norris", "gi"), `${lastName}`);
+  let newCelebrity = new Celebrity({ firstName, lastName, occupation, catchPhrase });  // creating an instance of the model like this and pushing this instance into a global variable, permit to have access to the id of the instance evrywhere in the seeds file
   celebrities.push(newCelebrity);
 }
 console.log( "CELEBRITIES -->", celebrities )
